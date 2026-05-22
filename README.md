@@ -1,6 +1,8 @@
 # Fizban's Wands
 
-Fantasy-themed static e-commerce storefront built with React and Vite for GitHub Pages.
+A polished React + Vite static e-commerce storefront for **Fizban's Wands**, a whimsical magical wand shop inspired by Fizban from Dragonlance Chronicles.
+
+![Screenshot placeholder: Fizban's Wands fantasy storefront with hero, catalog cards, cart, checkout, and magical receipt](./docs/screenshot-placeholder.png)
 
 Live demo: https://cindy-pi.github.io/ai-storefront-gpt/
 
@@ -12,74 +14,83 @@ Install dependencies:
 npm install
 ```
 
-Start the Vite dev server:
+Start Vite:
 
 ```bash
 npm run dev
 ```
 
-Build the production bundle:
+Visit `http://localhost:5173/ai-storefront-gpt/`.
+
+## Running the Build
+
+Create a production build:
 
 ```bash
 npm run build
 ```
 
-Run tests:
-
-```bash
-npm test
-```
+The compiled static site is written to `dist/`.
 
 ## Live Demo
 
-The app is configured for GitHub Pages at `https://cindy-pi.github.io/ai-storefront-gpt/`.
+The GitHub Pages target is `https://cindy-pi.github.io/ai-storefront-gpt/`.
 
-The Vite `base` path is `/ai-storefront-gpt/` so built assets resolve correctly when deployed from this repository path.
+The Vite base path is configured as `/ai-storefront-gpt/` in `vite.config.js` so assets load correctly from the repository Pages path.
 
 ## About the Shop
 
-Fizban's Wands is a polished static storefront for magical implements. It includes:
+Fizban's Wands is a fantasy-themed storefront with a starry home page, alignment-based catalog, wand detail modal, shopping cart, checkout, and a parchment-style delivery confirmation.
 
-- A hero home page with featured legendary wands.
-- A complete catalog of 36 wands.
-- Alignment categories for Good, Neutral, and Evil.
-- Product detail modals with wood, core, length, temperament, rarity, price, and magical effect.
-- A fantasy UI designed for desktop and mobile screens.
+The shop uses bespoke vanilla CSS with a dark magical palette, gold accents, responsive grids, and generated SVG wand art for every product.
 
 ## Seed Data
 
-The catalog data lives in `src/data/wands.js` and includes 12 Good wands, 12 Neutral wands, and 12 Evil wands.
+Seed data lives in `src/data/wands.js`.
 
-Each wand has a generated SVG image embedded as a data URL so the static site does not depend on remote image hosting.
+The catalog contains 36 wands across three alignments:
+
+- 12 Good wands
+- 12 Neutral wands
+- 12 Evil wands
+
+Each wand includes an id, name, alignment, description, price, magical properties, rarity, wood, core, length, and color.
+
+To add more wands, append another object to the exported `wands` array using the same shape. The catalog filters, counts, sort controls, cart, and receipt rendering will pick it up automatically.
 
 ## Customer Credits
 
-Each browser profile starts with `1,000gp`. The current balance is stored in localStorage under `fizbans-wands-balance`.
+Every customer starts with `1,000gp`.
 
-To reset demo state, clear site data for the page or remove these localStorage keys:
+The balance persists in localStorage under `fizban_balance`. Cart contents persist under `fizban_cart`, and previous purchases persist under `fizban_history`.
 
-- `fizbans-wands-cart`
-- `fizbans-wands-balance`
-- `fizbans-wands-orders`
-
-## Cart
-
-The cart supports multiple wands and quantity updates. Cart state persists in localStorage under `fizbans-wands-cart`.
-
-Cart totals are calculated in gold pieces using the helper functions in `src/lib/cart.js`.
+To reset only the balance, clear `fizban_balance` from localStorage. To reset the full demo state, clear all three keys.
 
 ## Checkout
 
-Checkout blocks empty carts and carts that exceed the current gold balance. Successful checkout deducts the total from the balance, clears the cart, and creates a persisted order record.
+Checkout requires a traveler name and email address for display-only owl-post records. No backend or real payment service is used.
+
+The cart summary includes subtotal, 10% tax, and grand total. If the order total is greater than the current gold balance, checkout is disabled and an insufficient-funds warning is shown.
+
+When checkout succeeds, the app deducts gold from the stored balance, saves the order to purchase history, clears the cart, and navigates to the confirmation page.
 
 ## Simulated Email Receipt
 
-After checkout, the Receipts page shows the latest magical delivery receipt with purchased wand images, quantities, total paid, and remaining balance.
+The confirmation page displays a **Magical Delivery Parchment** instead of sending a real email.
 
-Purchase history persists in localStorage under `fizbans-wands-orders`.
+Because this is a static GitHub Pages site with no backend or external APIs, the receipt is simulated in-browser and saved to localStorage as purchase history. The parchment includes order number, date, customer name, each purchased wand with SVG art, a wax seal, and the owl-post delivery timeframe.
 
 ## Deploying to GitHub Pages
 
-The workflow in `.github/workflows/deploy.yml` runs on pushes to `main` and manual dispatches. It installs dependencies with `npm ci`, builds with `npm run build`, uploads the `dist` artifact, and deploys through GitHub Pages.
+1. Fork or clone the repository.
+2. Install dependencies with `npm install`.
+3. Push changes to `main`.
+4. GitHub Actions runs `.github/workflows/deploy.yml`.
+5. The workflow installs with `npm ci`, runs `npm run build`, uploads `dist/`, and deploys through GitHub Pages.
+6. The deployed site becomes available at `https://cindy-pi.github.io/ai-storefront-gpt/`.
 
-Repository Pages must be configured to deploy from GitHub Actions.
+## GitHub Repository Settings
+
+GitHub Pages must be configured to deploy from Actions:
+
+`Settings` → `Pages` → `Source` → `GitHub Actions`

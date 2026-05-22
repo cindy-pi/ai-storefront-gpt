@@ -1,102 +1,515 @@
-const wandSeeds = {
-  Good: [
-    ['Dawnspire Alder', 95, 'Alder', 'sun opal', 'Kindles warm daylight that steadies frightened allies.'],
-    ['Mercy Willow', 82, 'Willow', 'moon pearl', 'Mends small wounds and softens hostile tempers.'],
-    ['Celestial Rowan', 118, 'Rowan', 'star sapphire', 'Draws a clean arc of radiant warding light.'],
-    ['Hearthguard Oak', 76, 'Oak', 'ember agate', 'Raises a golden shield around a campsite.'],
-    ['Seraph Birch', 104, 'Birch', 'angel feather', 'Sings when danger stalks the innocent.'],
-    ['Truthsilver Hazel', 88, 'Hazel', 'silver acorn', 'Reveals glamours and half-spoken lies.'],
-    ['Springtide Elm', 69, 'Elm', 'green garnet', 'Coaxes flowers, vines, and clean water from tired earth.'],
-    ['Knightly Ash', 132, 'Ash', 'griffon talon', 'Bolsters courage before a desperate charge.'],
-    ['Lantern Yew', 91, 'Yew', 'glowmoth wing', 'Casts a steady light no storm can snuff.'],
-    ['Sanctuary Cedar', 145, 'Cedar', 'halo quartz', 'Anchors a short-lived refuge against dark magic.'],
-    ['Pilgrim Maple', 63, 'Maple', 'compass seed', 'Points toward safe roads and honest shelter.'],
-    ['Aurora Poplar', 109, 'Poplar', 'sky crystal', 'Paints defensive ribbons of dawn-colored frost.'],
-  ],
-  Neutral: [
-    ['Mistvein Cypress', 73, 'Cypress', 'river glass', 'Bends fog into maps, curtains, and quiet exits.'],
-    ['Clockwork Beech', 124, 'Beech', 'brass beetle', 'Measures magical intervals with perfect patience.'],
-    ['Ambercoil Juniper', 97, 'Juniper', 'amber eye', 'Stores one minor spell for later release.'],
-    ['Archivist Pine', 86, 'Pine', 'inkstone', 'Copies spoken words as glowing runes.'],
-    ['Crossroad Sycamore', 101, 'Sycamore', 'lodestone', 'Finds the strongest choice among branching paths.'],
-    ['Stormsalt Tamarisk', 116, 'Tamarisk', 'storm pearl', 'Calls a snap of rain, static, or salt wind.'],
-    ['Mirror Fir', 79, 'Fir', 'polished mica', 'Reflects illusions as harmless silver shadows.'],
-    ['Nomad Palm', 68, 'Palm', 'sun coin', 'Keeps its bearer comfortable in harsh climates.'],
-    ['Scribevine Laurel', 92, 'Laurel', 'blue inkcap', 'Writes contracts that glow when broken.'],
-    ['Equinox Walnut', 139, 'Walnut', 'split quartz', 'Balances two opposing enchantments for a minute.'],
-    ['Mothwing Linden', 57, 'Linden', 'dusty chrysalis', 'Silences footsteps and softens sharp outlines.'],
-    ['Riddlebone Olive', 111, 'Olive', 'sphinx whisker', 'Answers one practical question in cryptic rhyme.'],
-  ],
-  Evil: [
-    ['Gravesmoke Blackthorn', 127, 'Blackthorn', 'onyx tooth', 'Exhales a chilling smoke that saps resolve.'],
-    ['Viperthorn Acacia', 99, 'Acacia', 'serpent scale', 'Turns a whispered threat into venomous force.'],
-    ['Bloodmoon Mahogany', 154, 'Mahogany', 'ruby clot', 'Burns crimson when bargains are sealed in fear.'],
-    ['Nightjar Ebony', 142, 'Ebony', 'raven heart', 'Blots torchlight and carries words through darkness.'],
-    ['Ironrot Mangrove', 108, 'Mangrove', 'rust nail', 'Corrodes locks, hinges, armor, and trust.'],
-    ['Ashen Thorn', 84, 'Thorn', 'grave ash', 'Turns fresh footprints into cold black cinders.'],
-    ['Gloamfang Holly', 96, 'Holly', 'wolf fang', 'Summons a pursuing howl only the guilty hear.'],
-    ['Dreadroot Hemlock', 121, 'Hemlock', 'green venom', 'Wilts nearby plants to empower a curse.'],
-    ['Chainspell Hornbeam', 135, 'Hornbeam', 'iron link', 'Binds a target with spectral shackles.'],
-    ['Witchfire Elder', 147, 'Elder', 'witchfire coal', 'Throws emerald fire that hungers for enchantments.'],
-    ['Ruinmark Locust', 71, 'Locust', 'cracked coin', 'Leaves a bad-luck sigil on doors and dice.'],
-    ['Obsidian Ivy', 113, 'Ivy', 'obsidian thorn', 'Creeps shadowy vines over walls and windows.'],
-  ],
-}
-
-const alignmentColors = {
-  Good: ['#f8d97a', '#7fd7ff'],
-  Neutral: ['#9bb0a4', '#d2b16f'],
-  Evil: ['#8b1d3f', '#2c1238'],
-}
-
-function slugify(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-}
-
-function wandImage(name, alignment, index) {
-  const [primary, secondary] = alignmentColors[alignment]
-  const tilt = index % 2 === 0 ? 26 : -26
-  const spark = alignment === 'Evil' ? '#e95f7d' : alignment === 'Good' ? '#fff6b7' : '#f2ead0'
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" role="img" aria-label="${name}">
-      <defs>
-        <linearGradient id="wood" x1="0" x2="1">
-          <stop offset="0" stop-color="${primary}"/>
-          <stop offset="1" stop-color="${secondary}"/>
-        </linearGradient>
-        <filter id="glow"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <rect width="420" height="260" rx="28" fill="#160f22"/>
-      <circle cx="74" cy="66" r="36" fill="${primary}" opacity="0.16"/>
-      <circle cx="340" cy="192" r="58" fill="${secondary}" opacity="0.15"/>
-      <g transform="translate(210 130) rotate(${tilt})" filter="url(#glow)">
-        <rect x="-148" y="-8" width="278" height="16" rx="8" fill="url(#wood)"/>
-        <path d="M122 -18 L166 0 L122 18 Z" fill="${spark}"/>
-        <circle cx="-132" cy="0" r="18" fill="${secondary}" stroke="${spark}" stroke-width="5"/>
-      </g>
-      <g fill="${spark}" opacity="0.9">
-        <path d="M96 190 l7 15 15 7-15 7-7 15-7-15-15-7 15-7z"/>
-        <path d="M318 50 l5 11 11 5-11 5-5 11-5-11-11-5 11-5z"/>
-        <circle cx="262" cy="214" r="5"/>
-      </g>
-    </svg>`
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
-}
-
-export const wands = Object.entries(wandSeeds).flatMap(([alignment, seeds]) =>
-  seeds.map(([name, price, wood, core, power], index) => ({
-    id: slugify(name),
-    name,
-    alignment,
-    price,
-    wood,
-    core,
-    power,
-    length: `${9 + (index % 6)} ${index % 2 === 0 ? '1/2' : '3/4'} inches`,
-    temperament: ['loyal', 'curious', 'stubborn', 'dramatic'][index % 4],
-    rarity: price > 130 ? 'Legendary' : price > 100 ? 'Rare' : 'Common',
-    image: wandImage(name, alignment, index),
-  })),
-)
+export const wands = [
+  {
+    id: 'good-001',
+    name: 'Sunbrand',
+    alignment: 'Good',
+    description:
+      'Sunbrand hums with the first warmth of dawn and leaves a faint trail of golden motes in the air. It is favored by healers, wardens, and anyone who believes darkness should be answered politely but firmly.',
+    price: 450,
+    magicalProperties: ['Radiant flare', 'Courage aura', 'Undead ward'],
+    rarity: 'Rare',
+    wood: 'Rowan',
+    core: 'Phoenix Feather',
+    length: '11"',
+    color: '#FFD700',
+  },
+  {
+    id: 'good-002',
+    name: 'Starweaver',
+    alignment: 'Good',
+    description:
+      'Starweaver spins soft constellations around its bearer when danger draws near. Its silver light is gentle enough for lullabies and sharp enough to cut through illusions.',
+    price: 380,
+    magicalProperties: ['Starlight veil', 'Illusion piercing', 'Guiding spark'],
+    rarity: 'Uncommon',
+    wood: 'Silver Maple',
+    core: 'Unicorn Hair',
+    length: '10.5"',
+    color: '#C0C0FF',
+  },
+  {
+    id: 'good-003',
+    name: 'Dawnbreaker',
+    alignment: 'Good',
+    description:
+      'Dawnbreaker snaps awake with a sunrise crackle whenever tyrants make speeches. Its orange glow rallies tired companions and burns away minor curses.',
+    price: 520,
+    magicalProperties: ['Curse singe', 'Rallying light', 'Dawn burst'],
+    rarity: 'Rare',
+    wood: 'Willow',
+    core: 'Pegasus Feather',
+    length: '12"',
+    color: '#FF8C00',
+  },
+  {
+    id: 'good-004',
+    name: 'Hearthkeeper',
+    alignment: 'Good',
+    description:
+      'Hearthkeeper smells faintly of cedar smoke and fresh bread. A flick from this wand can make a cold campsite feel like a beloved kitchen.',
+    price: 290,
+    magicalProperties: ['Camp ward', 'Comforting ember', 'Fear softening'],
+    rarity: 'Common',
+    wood: 'Oak',
+    core: 'Heartstring of a Good Dragon',
+    length: '9.5"',
+    color: '#8B4513',
+  },
+  {
+    id: 'good-005',
+    name: 'Luminos',
+    alignment: 'Good',
+    description:
+      'Luminos is almost transparent until invoked, when sunbeams gather inside its crystal grain. Sages claim it remembers every honest oath sworn beneath noon light.',
+    price: 680,
+    magicalProperties: ['Brilliant radiance', 'Oath gleam', 'Shadow banishment'],
+    rarity: 'Very Rare',
+    wood: 'Crystal Ash',
+    core: 'Sunbeam Shard',
+    length: '11.5"',
+    color: '#FFFACD',
+  },
+  {
+    id: 'good-006',
+    name: 'Verdant Staff',
+    alignment: 'Good',
+    description:
+      'Verdant Staff answers wounded forests with rustling leaves and stubborn green shoots. Even in winter, its bearer may hear birdsong at the edge of sleep.',
+    price: 340,
+    magicalProperties: ['Vine mend', 'Clean water call', 'Beast calming'],
+    rarity: 'Uncommon',
+    wood: 'Elder',
+    core: 'Forest Spirit Essence',
+    length: '13"',
+    color: '#228B22',
+  },
+  {
+    id: 'good-007',
+    name: 'Celestia',
+    alignment: 'Good',
+    description:
+      'Celestia carries a solemn hush, as if an entire chapel were listening from the clouds. It produces miracles reluctantly and only for hands that intend mercy.',
+    price: 890,
+    magicalProperties: ['Angel ward', 'Celestial beacon', 'Sanctified barrier', 'Mercy pulse'],
+    rarity: 'Legendary',
+    wood: 'Silverwood',
+    core: 'Angel Feather',
+    length: '10"',
+    color: '#F0E68C',
+  },
+  {
+    id: 'good-008',
+    name: 'Holyflame',
+    alignment: 'Good',
+    description:
+      'Holyflame burns red-gold without consuming wick, cloth, or courage. Paladins prize it because it makes evil shadows look deeply embarrassed.',
+    price: 410,
+    magicalProperties: ['Sacred flame', 'Fiend scorch', 'Lantern blessing'],
+    rarity: 'Rare',
+    wood: 'Yew',
+    core: 'Sacred Ember',
+    length: '11"',
+    color: '#FF6347',
+  },
+  {
+    id: 'good-009',
+    name: 'Trueheart',
+    alignment: 'Good',
+    description:
+      'Trueheart is plain, warm, and far braver than it looks. Its magic steadies trembling hands and makes lies taste like bitter ash.',
+    price: 175,
+    magicalProperties: ['Truth pulse', 'Steady hand', 'Small blessing'],
+    rarity: 'Common',
+    wood: 'Birch',
+    core: 'Griffon Feather',
+    length: '10"',
+    color: '#DEB887',
+  },
+  {
+    id: 'good-010',
+    name: 'Morningstar',
+    alignment: 'Good',
+    description:
+      'Morningstar scatters dew-bright sparks that hang in the air like hopeful bells. It is particularly fond of lost travelers and overdramatic rescues.',
+    price: 560,
+    magicalProperties: ['Dew shield', 'Hope chime', 'Path brightening'],
+    rarity: 'Very Rare',
+    wood: 'Magnolia',
+    core: 'Morning Dew Crystal',
+    length: '12.5"',
+    color: '#87CEEB',
+  },
+  {
+    id: 'good-011',
+    name: 'Peaceweald',
+    alignment: 'Good',
+    description:
+      'Peaceweald is light as a feather and twice as judgmental about violence. When raised between foes, its green glow asks everyone to reconsider their choices.',
+    price: 130,
+    magicalProperties: ['Calming field', 'Dove sign', 'Gentle root snare'],
+    rarity: 'Common',
+    wood: 'Hawthorn',
+    core: 'Dove Wing',
+    length: '9"',
+    color: '#98FB98',
+  },
+  {
+    id: 'good-012',
+    name: 'Radiance',
+    alignment: 'Good',
+    description:
+      'Radiance shines with the patient glow of a sunlit temple wall. Its power is best used to protect, though it can blind monsters that insist on being rude.',
+    price: 720,
+    magicalProperties: ['Sunstone shield', 'Blinding halo', 'Restorative glimmer'],
+    rarity: 'Very Rare',
+    wood: 'White Oak',
+    core: 'Sunstone Core',
+    length: '11"',
+    color: '#FFEFD5',
+  },
+  {
+    id: 'neutral-001',
+    name: "Wanderer's Reach",
+    alignment: 'Neutral',
+    description:
+      "Wanderer's Reach smells of salt roads and maps folded too many times. It favors practical magic, especially when the practical answer is leaving quickly.",
+    price: 310,
+    magicalProperties: ['Distant grasp', 'Tide compass', 'Rope charm'],
+    rarity: 'Uncommon',
+    wood: 'Driftwood',
+    core: 'Sea Serpent Scale',
+    length: '12"',
+    color: '#708090',
+  },
+  {
+    id: 'neutral-002',
+    name: 'Stonecaller',
+    alignment: 'Neutral',
+    description:
+      'Stonecaller is heavy for its size and stubborn as a tax collector. It murmurs to old walls, loose gravel, and mountains with secrets to keep.',
+    price: 260,
+    magicalProperties: ['Pebble command', 'Stone skin', 'Tremor sense'],
+    rarity: 'Common',
+    wood: 'Granite-laced Ash',
+    core: 'Earth Elemental Shard',
+    length: '10"',
+    color: '#A0A0A0',
+  },
+  {
+    id: 'neutral-003',
+    name: 'Tidewatcher',
+    alignment: 'Neutral',
+    description:
+      'Tidewatcher beads with seawater even in desert heat. Its magic rises and falls with mood, moon, and the price of fish.',
+    price: 390,
+    magicalProperties: ['Wave tug', 'Ink cloud', 'Water breathing whisper'],
+    rarity: 'Uncommon',
+    wood: 'Coral Wood',
+    core: 'Kraken Ink',
+    length: '11"',
+    color: '#20B2AA',
+  },
+  {
+    id: 'neutral-004',
+    name: 'Moonveil',
+    alignment: 'Neutral',
+    description:
+      'Moonveil wraps its bearer in a violet hush and makes silver out of ordinary shadow. It is excellent for secrets, ceremonies, and dramatic entrances.',
+    price: 470,
+    magicalProperties: ['Moonlit disguise', 'Dream whisper', 'Lunar shield'],
+    rarity: 'Rare',
+    wood: 'Ebony',
+    core: 'Lunar Crystal',
+    length: '10.5"',
+    color: '#483D8B',
+  },
+  {
+    id: 'neutral-005',
+    name: 'Balance',
+    alignment: 'Neutral',
+    description:
+      'Balance refuses to lean left, right, good, evil, or toward poor bookkeeping. It settles unstable enchantments by making every force pay its share.',
+    price: 550,
+    magicalProperties: ['Equilibrium field', 'Counterspell nudge', 'Measured force'],
+    rarity: 'Rare',
+    wood: 'Cherrywood',
+    core: 'Sphinx Hair',
+    length: '11"',
+    color: '#DC143C',
+  },
+  {
+    id: 'neutral-006',
+    name: 'Fogcaller',
+    alignment: 'Neutral',
+    description:
+      'Fogcaller keeps its intentions blurred and its exits convenient. A twist of the wrist can turn a hallway into a damp mystery.',
+    price: 230,
+    magicalProperties: ['Mist bank', 'Muffled steps', 'Blurred outline'],
+    rarity: 'Common',
+    wood: 'Driftpine',
+    core: 'Wraith Wisp',
+    length: '12.5"',
+    color: '#C0C0C0',
+  },
+  {
+    id: 'neutral-007',
+    name: 'Starfall',
+    alignment: 'Neutral',
+    description:
+      'Starfall was carved from timber struck by something that never apologized for falling. Its navy glow makes wishes feel dangerous and very close.',
+    price: 840,
+    magicalProperties: ['Meteor spark', 'Gravity tug', 'Wish ember', 'Night flare'],
+    rarity: 'Legendary',
+    wood: 'Meteorite-wood',
+    core: 'Falling Star Shard',
+    length: '13"',
+    color: '#191970',
+  },
+  {
+    id: 'neutral-008',
+    name: 'Thornweald',
+    alignment: 'Neutral',
+    description:
+      'Thornweald is not cruel, but it has very firm boundaries. It grows brambles exactly where brambles would be most inconvenient.',
+    price: 195,
+    magicalProperties: ['Briar snare', 'Poison warning', 'Hedge shelter'],
+    rarity: 'Common',
+    wood: 'Blackthorn',
+    core: 'Basilisk Scale',
+    length: '10"',
+    color: '#556B2F',
+  },
+  {
+    id: 'neutral-009',
+    name: 'Shimmer',
+    alignment: 'Neutral',
+    description:
+      'Shimmer giggles in pockets and turns candlelight into impossible colors. It is beloved by performers and suspected by accountants.',
+    price: 430,
+    magicalProperties: ['Glamour flash', 'Faerie sparkle', 'Color mirror'],
+    rarity: 'Rare',
+    wood: 'Opalwood',
+    core: 'Faerie Dust',
+    length: '9.5"',
+    color: '#EE82EE',
+  },
+  {
+    id: 'neutral-010',
+    name: 'Windwhisper',
+    alignment: 'Neutral',
+    description:
+      'Windwhisper bends but never breaks, which it mentions constantly in rustling tones. It carries messages through keyholes and arguments over rooftops.',
+    price: 160,
+    magicalProperties: ['Message breeze', 'Feather fall', 'Gust shove'],
+    rarity: 'Common',
+    wood: 'Bamboo',
+    core: 'Zephyr Essence',
+    length: '14"',
+    color: '#90EE90',
+  },
+  {
+    id: 'neutral-011',
+    name: 'Dunestalker',
+    alignment: 'Neutral',
+    description:
+      'Dunestalker is warm, dry, and impossible to lose in a sandstorm. It bargains with mirages and remembers every buried road.',
+    price: 500,
+    magicalProperties: ['Mirage step', 'Sand veil', 'Heat shimmer'],
+    rarity: 'Rare',
+    wood: 'Acacia',
+    core: 'Desert Djinn Hair',
+    length: '11.5"',
+    color: '#DAA520',
+  },
+  {
+    id: 'neutral-012',
+    name: 'Veilpiercer',
+    alignment: 'Neutral',
+    description:
+      "Veilpiercer listens to whispers nobody else admits hearing. Its grey light pries at glamours, wards, and politely concealed hauntings.",
+    price: 670,
+    magicalProperties: ['Spectral sight', 'Ward tapping', 'Banshee note'],
+    rarity: 'Very Rare',
+    wood: 'Ironwood',
+    core: "Banshee's Breath",
+    length: '10"',
+    color: '#696969',
+  },
+  {
+    id: 'evil-001',
+    name: 'Soulreaper',
+    alignment: 'Evil',
+    description:
+      "Soulreaper makes nearby candles burn cold and blue. It is sold with a warning tag, three locks, and Fizban's least reassuring smile.",
+    price: 750,
+    magicalProperties: ['Soul chill', 'Fear siphon', 'Grave silence'],
+    rarity: 'Very Rare',
+    wood: 'Yew',
+    core: "Dementor's Whisper",
+    length: '13"',
+    color: '#2F0000',
+  },
+  {
+    id: 'evil-002',
+    name: 'Darkwhisper',
+    alignment: 'Evil',
+    description:
+      'Darkwhisper speaks from corners even when no one is standing there. It excels at secrets that should have remained under stones.',
+    price: 580,
+    magicalProperties: ['Shadow message', 'Light snuff', 'Draconic menace'],
+    rarity: 'Rare',
+    wood: 'Blackwood',
+    core: 'Shadow Dragon Scale',
+    length: '11"',
+    color: '#1C1C1C',
+  },
+  {
+    id: 'evil-003',
+    name: 'Bonecaller',
+    alignment: 'Evil',
+    description:
+      'Bonecaller rattles softly when someone lies about graveyards. It can summon old memories from old bones, though the memories are rarely friendly.',
+    price: 430,
+    magicalProperties: ['Bone rattle', 'Lich spark', 'Sepulcher echo'],
+    rarity: 'Uncommon',
+    wood: 'Deadwood',
+    core: 'Lich Dust',
+    length: '12"',
+    color: '#8B7355',
+  },
+  {
+    id: 'evil-004',
+    name: 'Voidtouched',
+    alignment: 'Evil',
+    description:
+      'Voidtouched drinks reflections and gives nothing useful back. Its crystal core hums like a locked door at the edge of creation.',
+    price: 910,
+    magicalProperties: ['Void blink', 'Silence well', 'Starless shield', 'Reality fray'],
+    rarity: 'Legendary',
+    wood: 'Obsidian-laced Ebony',
+    core: 'Void Crystal',
+    length: '10.5"',
+    color: '#0D0D2B',
+  },
+  {
+    id: 'evil-005',
+    name: 'Bloodthorn',
+    alignment: 'Evil',
+    description:
+      'Bloodthorn pulses when bargains become dangerous. Its magic is precise, hungry, and best kept away from legal documents.',
+    price: 640,
+    magicalProperties: ['Crimson binding', 'Vampiric prick', 'Pain bloom'],
+    rarity: 'Very Rare',
+    wood: 'Thornwood',
+    core: 'Vampire Fang',
+    length: '11.5"',
+    color: '#8B0000',
+  },
+  {
+    id: 'evil-006',
+    name: 'Hexblade',
+    alignment: 'Evil',
+    description:
+      "Hexblade's crooked tip points toward grudges with remarkable accuracy. It turns petty spite into purple sparks and larger spite into invoices.",
+    price: 280,
+    magicalProperties: ['Hex mark', 'Cursed edge', 'Bad luck twist'],
+    rarity: 'Uncommon',
+    wood: 'Cursed Willow',
+    core: "Hag's Nail",
+    length: '9.5"',
+    color: '#4B0082',
+  },
+  {
+    id: 'evil-007',
+    name: 'Plaguecaller',
+    alignment: 'Evil',
+    description:
+      'Plaguecaller smells of wet leaves and wrong seasons. Its green magic weakens resolve, wilts flowers, and makes rats unusually attentive.',
+    price: 360,
+    magicalProperties: ['Miasma puff', 'Withering touch', 'Vermin whisper'],
+    rarity: 'Uncommon',
+    wood: 'Rotwood',
+    core: "Death's Head Moth Wing",
+    length: '12.5"',
+    color: '#556B2F',
+  },
+  {
+    id: 'evil-008',
+    name: 'Nightterror',
+    alignment: 'Evil',
+    description:
+      'Nightterror flickers like a nightmare trying to remember your name. It is strongest at midnight, during storms, and around suspiciously locked nurseries.',
+    price: 490,
+    magicalProperties: ['Nightmare veil', 'Panic spark', 'Dream claw'],
+    rarity: 'Rare',
+    wood: 'Shadow Ash',
+    core: 'Nightmare Mane',
+    length: '10"',
+    color: '#17002E',
+  },
+  {
+    id: 'evil-009',
+    name: 'Doomweave',
+    alignment: 'Evil',
+    description:
+      'Doomweave knots fate into dark little loops and calls it craftsmanship. Its horn fragment glows when disaster is near or when someone says, what could go wrong?',
+    price: 820,
+    magicalProperties: ['Doom thread', 'Demon spark', 'Fate snare', 'Ashen omen'],
+    rarity: 'Legendary',
+    wood: 'Cursed Oak',
+    core: "Demon's Horn Fragment",
+    length: '13.5"',
+    color: '#3D0000',
+  },
+  {
+    id: 'evil-010',
+    name: 'Frostbite',
+    alignment: 'Evil',
+    description:
+      'Frostbite leaves lacework ice across gloves, tables, and inconvenient witnesses. Its cold is beautiful in the way locked gates are beautiful.',
+    price: 370,
+    magicalProperties: ['Freezing ray', 'Frost wisp', 'Brittle curse'],
+    rarity: 'Uncommon',
+    wood: 'Glacial Pine',
+    core: 'Frost Wraith Essence',
+    length: '11"',
+    color: '#003366',
+  },
+  {
+    id: 'evil-011',
+    name: 'Scourge',
+    alignment: 'Evil',
+    description:
+      'Scourge is matte black and unpleasantly warm. It turns disciplined gestures into forceful dark arcs that leave the air tasting of iron.',
+    price: 530,
+    magicalProperties: ['Chimera lash', 'Dark impact', 'Armor crack'],
+    rarity: 'Rare',
+    wood: 'Deathwood',
+    core: 'Dark Chimera Scale',
+    length: '10.5"',
+    color: '#2D2D2D',
+  },
+  {
+    id: 'evil-012',
+    name: 'Maleficus',
+    alignment: 'Evil',
+    description:
+      'Maleficus watches with a basilisk eye set deep in venom-dark grain. It rewards patience, malice, and owners who keep antidotes nearby.',
+    price: 690,
+    magicalProperties: ['Petrifying glint', 'Venom thread', 'Serpent command'],
+    rarity: 'Very Rare',
+    wood: 'Venomwood',
+    core: 'Basilisk Eye',
+    length: '12"',
+    color: '#1A0A00',
+  },
+]
 
 export const alignments = ['All', 'Good', 'Neutral', 'Evil']
+export const rarityRank = {
+  Common: 1,
+  Uncommon: 2,
+  Rare: 3,
+  'Very Rare': 4,
+  Legendary: 5,
+}
