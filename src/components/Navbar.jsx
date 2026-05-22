@@ -14,7 +14,13 @@ export default function Navbar() {
       <Link className="logo" to="/" onClick={closeMenu}>
         ⚡ <span>Fizban's Wands</span>
       </Link>
-      <button className="menu-toggle" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
+      <button
+        className="menu-toggle"
+        type="button"
+        aria-expanded={menuOpen}
+        aria-label="Toggle navigation menu"
+        onClick={() => setMenuOpen((open) => !open)}
+      >
         <span></span>
         <span></span>
         <span></span>
