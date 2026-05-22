@@ -2,7 +2,7 @@
 
 A polished React + Vite static e-commerce storefront for **Fizban's Wands**, a whimsical magical wand shop inspired by Fizban from Dragonlance Chronicles.
 
-![Screenshot placeholder: Fizban's Wands fantasy storefront with hero, catalog cards, cart, checkout, and magical receipt](./docs/screenshot-placeholder.png)
+![Screenshot placeholder: Fizban's Wands fantasy storefront with hero, catalog cards, cart, checkout, and magical receipt](./docs/screenshot-placeholder.svg)
 
 Live demo: https://cindy-pi.github.io/ai-storefront-gpt/
 
